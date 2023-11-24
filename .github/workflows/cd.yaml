@@ -19,3 +19,25 @@ jobs:
                   password: ${{ secrets.DOCKER_PASSWORD }}
                   repository: ${{ secrets.DOCKER_USERNAME }}/gitops-fc
                   tags: ${{ github.sha }}, latest
+
+            - name: Setup Kustomize
+              uses: imranismail/setup-kustomize@v2.0.0
+
+            - name: Update Kubernetes resources
+              env:
+                  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+              run: |
+                cd k8s
+                kustomize edit set image goserver=$DOCKER_USERNAME/gitops-fc:${{ github.sha }}
+
+            - name: Commit changes
+              run: |
+                git config --local user.name "GitHub Action"
+                git config --local user.email "action@github.com"
+                git commit -am "Bump Docker version"
+
+            - name: Push changes
+              uses: ad-m/github-push-action@master
+              with:
+                  github_token: ${{ secrets.GITHUB_TOKEN }}
+                  repository: jdaibello/fc-gitops
