@@ -6,4 +6,4 @@ resources:
 images:
 - name: goserver
   newName: gvw0mdhhm1frln3hft9q/gitops-fc
-  newTag: d8dc6e70f14f4cfe62b54a3979102343715d8647
+  newTag: 0c8b41866d7e1a29423785addea71d6bd8499e37
